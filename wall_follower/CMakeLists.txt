@@ -132,6 +132,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
+
+# Step1. Add executible
 add_executable(${PROJECT_NAME}_node src/wall_follower.cpp)
 
 ## Rename C++ executable without prefix
@@ -142,9 +144,13 @@ add_executable(${PROJECT_NAME}_node src/wall_follower.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
+
+# Step2. Add dependencies
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
+
+# Step3. Target link libraries
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
 )
