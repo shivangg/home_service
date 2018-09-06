@@ -5,7 +5,7 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-void intendedGoal(move_base_msgs::MoveBaseGoal goal){
+actionlib::SimpleClientGoalState intendedGoal(move_base_msgs::MoveBaseGoal goal){
 
   //tell the action client that we want to spin a thread by default
   MoveBaseClient ac("move_base", true);
@@ -27,11 +27,8 @@ void intendedGoal(move_base_msgs::MoveBaseGoal goal){
   // Wait an infinite time for the results
   ac.waitForResult();
 
-  // Check if the robot reached its goal
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Hooray, the base moved 1 meter forward");
-  else
-    ROS_INFO("The base failed to move forward 1 meter for some reason");
+  return ac.getState();
+  
 }
 
 
@@ -45,7 +42,7 @@ int main(int argc, char** argv){
   move_base_msgs::MoveBaseGoal goal;
 
 
-  // Define a position and orientation for the robot to reach
+  // Define a position and orientation for the pickup point
   goal.target_pose.pose.position.x = 4.43;
   goal.target_pose.pose.position.y = 6.46;
   goal.target_pose.pose.position.z = 0;
@@ -55,9 +52,29 @@ int main(int argc, char** argv){
   goal.target_pose.pose.orientation.z = -0.70;
   goal.target_pose.pose.orientation.w = 0.71;
 
-  intendedGoal(goal);
+
+  // Check if the robot reached PICKUP point
+  if( intendedGoal(goal) == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("The base moved to the PICKUP point");
+  else
+    ROS_INFO("The base failed to move to the PICKUP point");
+
+  // Define a position and orientation for the pickup point
+  goal.target_pose.pose.position.x = -3.31;
+  goal.target_pose.pose.position.y = 6.67;
+  goal.target_pose.pose.position.z = 0;
+
+  goal.target_pose.pose.orientation.x = 0;
+  goal.target_pose.pose.orientation.y = 0;
+  goal.target_pose.pose.orientation.z = -0.70;
+  goal.target_pose.pose.orientation.w = 0.71;
+
+  // Check if the robot reached DROP point
+  if( intendedGoal(goal) == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("The base moved to the DROP point");
+  else
+    ROS_INFO("The base failed to move to the DROP point");
 
 
   return 0;
 }
-
