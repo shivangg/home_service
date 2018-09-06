@@ -59,6 +59,9 @@ int main(int argc, char** argv){
   else
     ROS_INFO("The base failed to move to the PICKUP point");
 
+  // sleep after reaching pickup point
+  sleep(5);
+  
   // Define a position and orientation for the pickup point
   goal.target_pose.pose.position.x = -3.31;
   goal.target_pose.pose.position.y = 6.67;
