@@ -38,6 +38,7 @@ int main(int argc, char** argv){
   // Initialize the simple_navigation_goals node
   ros::init(argc, argv, "pick_objects");
   // ros::init(argc, argv, "simple_navigation_goals");
+  ros::NodeHandle n;
 
   move_base_msgs::MoveBaseGoal goal;
 
@@ -58,9 +59,11 @@ int main(int argc, char** argv){
     ROS_INFO("The base moved to the PICKUP point");
   else
     ROS_INFO("The base failed to move to the PICKUP point");
-
+  // setting parameter server after pickpu reached
+  n.setParam("zone", "pick");
   // sleep after reaching pickup point
   sleep(5);
+  n.setParam("zone", "");
   
   // Define a position and orientation for the pickup point
   goal.target_pose.pose.position.x = -3.31;
@@ -77,7 +80,9 @@ int main(int argc, char** argv){
     ROS_INFO("The base moved to the DROP point");
   else
     ROS_INFO("The base failed to move to the DROP point");
-
+  n.setParam("zone", "drop");
+  sleep(5);
+  n.setParam("zone", "");
 
   return 0;
 }
