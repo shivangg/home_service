@@ -53,18 +53,21 @@ int main(int argc, char** argv){
   goal.target_pose.pose.orientation.z = -0.70;
   goal.target_pose.pose.orientation.w = 0.71;
 
+  // setting parameter server object at the pickup
+  n.setParam("objectAt", "pick");
 
   // Check if the robot reached PICKUP point
   if( intendedGoal(goal) == actionlib::SimpleClientGoalState::SUCCEEDED)
     ROS_INFO("The base moved to the PICKUP point");
   else
     ROS_INFO("The base failed to move to the PICKUP point");
-  // setting parameter server after pickpu reached
-  n.setParam("zone", "pick");
-  // sleep after reaching pickup point
-  sleep(5);
-  n.setParam("zone", "");
   
+  // sleep after reaching pickup point, simulates object pickup
+  sleep(4);
+  // To delete the visual marker, simulates object has been picked up
+  n.setParam("objectAt", "");
+  sleep(1);
+
   // Define a position and orientation for the pickup point
   goal.target_pose.pose.position.x = -3.31;
   goal.target_pose.pose.position.y = 6.67;
@@ -80,9 +83,9 @@ int main(int argc, char** argv){
     ROS_INFO("The base moved to the DROP point");
   else
     ROS_INFO("The base failed to move to the DROP point");
-  n.setParam("zone", "drop");
-  sleep(5);
-  n.setParam("zone", "");
+  
+  sleep(3);
+  n.setParam("objectAt", "drop");
 
   return 0;
 }
